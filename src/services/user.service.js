@@ -1,9 +1,9 @@
 const httpStatus = require('http-status');
 const { User } = require('../models');
 const ApiError = require('../utils/ApiError');
+const { ROLE } = require('../utils/constants');
 
 /**
- * Create a user
  * @param {Object} userBody
  * @returns {Promise<User>}
  */
@@ -29,7 +29,6 @@ const queryUsers = async (filter, options) => {
 };
 
 /**
- * Get user by id
  * @param {ObjectId} id
  * @returns {Promise<User>}
  */
@@ -38,7 +37,6 @@ const getUserById = async (id) => {
 };
 
 /**
- * Get user by email
  * @param {string} email
  * @returns {Promise<User>}
  */
@@ -47,7 +45,6 @@ const getUserByEmail = async (email) => {
 };
 
 /**
- * Update user by id
  * @param {ObjectId} userId
  * @param {Object} updateBody
  * @returns {Promise<User>}
@@ -66,7 +63,6 @@ const updateUserById = async (userId, updateBody) => {
 };
 
 /**
- * Delete user by id
  * @param {ObjectId} userId
  * @returns {Promise<User>}
  */
@@ -75,9 +71,16 @@ const deleteUserById = async (userId) => {
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
   }
-  await user.remove();
+  if (user.isDeleted) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'User already deleted');
+  }
+  user.isDeleted = true;
+  user.deletedAt = new Date();
+  await user.save();
   return user;
 };
+
+
 
 module.exports = {
   createUser,
