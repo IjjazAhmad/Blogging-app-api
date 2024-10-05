@@ -4,6 +4,7 @@ const userService = require('./user.service');
 const Token = require('../models/token.model');
 const ApiError = require('../utils/ApiError');
 const { tokenTypes } = require('../config/tokens');
+const superAdminService = require('./superAdmin.service');
 
 /**
  * Login with username and password
@@ -72,6 +73,26 @@ const resetPassword = async (resetPasswordToken, newPassword) => {
 };
 
 /**
+ * Reset password for super admin
+ * @param {string} resetPasswordToken
+ * @param {string} newPassword
+ * @returns {Promise}
+ */
+const superAdminResetPassword = async (resetPasswordToken, newPassword) => {
+  const resetPasswordTokenDoc = await tokenService.verifyToken(resetPasswordToken, tokenTypes.RESET_PASSWORD);
+  try {
+    const user = await superAdminService.getSuperAdminById(resetPasswordTokenDoc.user);
+    if (!user) {
+      throw new Error();
+    }
+    await superAdminService.updateSuperAdminById(user.id, { password: newPassword });
+    await Token.deleteMany({ user: user.id, type: tokenTypes.RESET_PASSWORD });
+  } catch (error) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'Password reset failed');
+  }
+};
+
+/**
  * Verify email
  * @param {string} verifyEmailToken
  * @returns {Promise}
@@ -96,4 +117,5 @@ module.exports = {
   refreshAuth,
   resetPassword,
   verifyEmail,
+  superAdminResetPassword,
 };
