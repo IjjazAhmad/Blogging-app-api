@@ -13,6 +13,7 @@ const allRoles = {
   ],
   moderator: [
     'managePosts',
+    'createPost',
     'deletePost',
     'updatePost',
     'deleteComment',
