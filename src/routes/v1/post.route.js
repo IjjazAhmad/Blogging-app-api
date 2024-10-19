@@ -7,10 +7,10 @@ const auth = require('../../middlewares/auth');
 const router = express.Router();
 router
     .route('/')
-    .get(auth(), postController.getAllPosts);
+    .get(auth('get'), postController.getAllPosts);
 router
     .route('/create')
-    .post(validate(postValidation.createPost), postController.createPost);
+    .post(auth(), validate(postValidation.createPost), postController.createPost);
 router
     .route('/getOwnPosts')
     .get(postController.getOwnPosts);

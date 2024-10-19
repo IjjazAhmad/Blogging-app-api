@@ -14,9 +14,12 @@ const verifyCallback = (req, resolve, reject, requiredRights) => async (err, use
   }
   if (requiredRights.length) {
     const userRights = roleRights.get(user.role);
-    const hasRequiredRights = requiredRights.every((requiredRight) => userRights.includes(requiredRight));
+    console.log("🚀 ~ verifyCallback ~ userRights:", userRights)
+    const hasRequiredRights = requiredRights.every((requiredRight) => {
+      return Object.values(userRights).some((rightsArray) => rightsArray.includes(requiredRight));
+    });
     if (!hasRequiredRights && req.params.userId !== user.id) {
-      return reject(new ApiError(httpStatus.FORBIDDEN, 'Forbidden'));
+      return reject(new ApiError(httpStatus.FORBIDDEN, 'Forbidden: You dont have permission to access this resource'));
     }
   }
   resolve();

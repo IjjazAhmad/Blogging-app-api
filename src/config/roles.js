@@ -2,36 +2,15 @@ const allRoles = {
   superAdmin: [
     'fullAccess'
   ],
-  admin: [
-    'getUsers',
-    'createUsers',
-    'managePosts',
-    'deleteAnyPost',
-    'suspendPost',
-    'manageComments',
-    'deleteAnyComment',
-  ],
-  moderator: [
-    'managePosts',
-    'createPost',
-    'deletePost',
-    'updatePost',
-    'deleteComment',
-    'updateComment',
-    'manageUsers',
-  ],
-  user: [
-    'createPost',
-    'readPost',
-    'updateOwnPost',
-    'deleteOwnPost',
-    'createComment',
-    'updateOwnComment',
-    'deleteOwnComment',
-    'likePost',
-    'dislikePost',
-    'manageUsers'
-  ]
+  admin: {
+    post: ['get', 'add', 'update', 'delete'],
+  },
+  moderator: {
+    post: ['get', 'add', 'update', 'delete'],
+  },
+  user: {
+    post: ['get', 'add', 'update', 'delete'],
+  }
 };
 
 const roles = Object.keys(allRoles);
