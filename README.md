@@ -384,7 +384,7 @@ const queryUsers = async (filter, options) => {
 
 The `filter` param is a regular mongo filter.
 
-The `options` param can have the following (optional) fields:
+The `options` param can have the following (optional) fields: 
 
 ```javascript
 const options = {
